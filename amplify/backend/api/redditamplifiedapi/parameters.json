@@ -1,0 +1,11 @@
+{
+  "AppSyncApiName": "redditamplifiedapi",
+  "DynamoDBBillingMode": "PAY_PER_REQUEST",
+  "DynamoDBEnableServerSideEncryption": false,
+  "AuthCognitoUserPoolId": {
+    "Fn::GetAtt": [
+      "authredditamplified7bf7da2a",
+      "Outputs.UserPoolId"
+    ]
+  }
+}

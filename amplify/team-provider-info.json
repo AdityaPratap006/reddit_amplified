@@ -10,6 +10,11 @@
       "StackName": "amplify-redditamplified-dev-05459",
       "StackId": "arn:aws:cloudformation:ap-south-1:724140774595:stack/amplify-redditamplified-dev-05459/33f7cd80-e022-11eb-8f7a-02ed63f242ec",
       "AmplifyAppId": "d234fjr85yeyx8"
+    },
+    "categories": {
+      "auth": {
+        "redditamplified7bf7da2a": {}
+      }
     }
   }
 }
