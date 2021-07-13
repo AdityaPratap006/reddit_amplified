@@ -77,6 +77,16 @@ const theme = createTheme({
       color: "#9CA3AF",
     },
   },
+  overrides: {
+    MuiOutlinedInput: {
+      input: {
+        "&:-webkit-autofill": {
+          "-webkit-box-shadow": "0 0 0 100px #000 inset",
+          "-webkit-text-fill-color": "#fff",
+        },
+      },
+    },
+  },
 });
 
 // https://material-ui.com/customization/theming/#responsivefontsizes-theme-options-theme

@@ -68,83 +68,91 @@ const Login: FC<Props> = () => {
   };
 
   return (
-    <Container style={{ padding: "2rem" }}>
-      <Paper style={{ padding: "2rem" }}>
-        <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
-          <Grid
-            container
-            direction="column"
-            alignItems="center"
-            justifyContent="center"
-            spacing={2}
-          >
-            <Grid item>
-              <TextField
-                id="username"
-                type="text"
-                label="Username"
-                variant="outlined"
-                {...register("username", {
-                  required: { value: true, message: "Please enter a username" },
-                  minLength: {
-                    value: 3,
-                    message: "Username should be between 3-16 characters",
-                  },
-                  maxLength: {
-                    value: 16,
-                    message: "Username should be between 3-16 characters",
-                  },
-                })}
-                error={!!errors.username}
-                helperText={errors.username?.message}
-              />
-            </Grid>
+    <Container style={{ padding: "2rem" }} maxWidth="xl">
+      <Grid container alignItems="center" justifyContent="center">
+        <Grid item xs={12} sm={10} md={8} lg={6} xl={4}>
+          <Paper style={{ padding: "2rem" }}>
+            <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    id="username"
+                    type="text"
+                    label="Username"
+                    variant="outlined"
+                    {...register("username", {
+                      required: {
+                        value: true,
+                        message: "Please enter a username",
+                      },
+                      minLength: {
+                        value: 3,
+                        message: "Username should be between 3-16 characters",
+                      },
+                      maxLength: {
+                        value: 16,
+                        message: "Username should be between 3-16 characters",
+                      },
+                    })}
+                    error={!!errors.username}
+                    helperText={errors.username?.message}
+                  />
+                </Grid>
 
-            <Grid item>
-              <TextField
-                id="password"
-                type="password"
-                label="Password"
-                variant="outlined"
-                {...register("password", {
-                  required: { value: true, message: "Please enter a password" },
-                  minLength: {
-                    value: 8,
-                    message: "Please enter a stronger password",
-                  },
-                })}
-                error={!!errors.password}
-                helperText={errors.password?.message}
-              />
-            </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    id="password"
+                    type="password"
+                    label="Password"
+                    variant="outlined"
+                    {...register("password", {
+                      required: {
+                        value: true,
+                        message: "Please enter a password",
+                      },
+                      minLength: {
+                        value: 8,
+                        message: "Please enter a stronger password",
+                      },
+                    })}
+                    error={!!errors.password}
+                    helperText={errors.password?.message}
+                  />
+                </Grid>
 
-            <Grid style={{ marginTop: 16 }}>
-              {!isSubmitting && (
-                <Button
-                  variant="contained"
-                  type="submit"
-                  disabled={!isValid}
-                  color="primary"
-                >
-                  Login
-                </Button>
-              )}
-              {isSubmitting && <CircularProgress />}
-            </Grid>
-          </Grid>
+                <Grid item xs={12} style={{ marginTop: 16 }}>
+                  <Grid container justifyContent="center">
+                    {!isSubmitting && (
+                      <Button
+                        variant="contained"
+                        type="submit"
+                        disabled={!isValid}
+                        color="primary"
+                      >
+                        Login
+                      </Button>
+                    )}
+                    {isSubmitting && <CircularProgress />}
+                  </Grid>
+                </Grid>
+              </Grid>
 
-          <Snackbar
-            open={snackbarOpen}
-            autoHideDuration={6000}
-            onClose={handleSnackbarClose}
-            anchorOrigin={{ horizontal: "right", vertical: "top" }}
-          >
-            <Alert onClose={handleSnackbarClose} severity="error">
-              {loginError}
-            </Alert>
-          </Snackbar>
-        </form>
-      </Paper>
+              <Snackbar
+                open={snackbarOpen}
+                autoHideDuration={6000}
+                onClose={handleSnackbarClose}
+                anchorOrigin={{ horizontal: "right", vertical: "top" }}
+              >
+                <Alert onClose={handleSnackbarClose} severity="error">
+                  {loginError}
+                </Alert>
+              </Snackbar>
+            </form>
+          </Paper>
+        </Grid>
+      </Grid>
     </Container>
   );
 };

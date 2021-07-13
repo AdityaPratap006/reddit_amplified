@@ -76,120 +76,135 @@ const SignUp: FC<Props> = () => {
   };
 
   return (
-    <Container style={{ padding: "2rem" }}>
-      <Paper style={{ padding: "2rem" }}>
-        <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
-          <Grid
-            container
-            direction="column"
-            alignItems="center"
-            justifyContent="center"
-            spacing={2}
-          >
-            <Grid item>
-              <TextField
-                id="username"
-                type="text"
-                label="Username"
-                variant="outlined"
-                {...register("username", {
-                  required: { value: true, message: "Please enter a username" },
-                  minLength: {
-                    value: 3,
-                    message: "Username should be between 3-16 characters",
-                  },
-                  maxLength: {
-                    value: 16,
-                    message: "Username should be between 3-16 characters",
-                  },
-                })}
-                error={!!errors.username}
-                helperText={errors.username?.message}
-              />
-            </Grid>
-            <Grid item>
-              <TextField
-                id="email"
-                type="email"
-                label="Email"
-                variant="outlined"
-                {...register("email", {
-                  required: { value: true, message: "Please enter an email" },
-                })}
-                error={!!errors.email}
-                helperText={errors.email?.message}
-              />
-            </Grid>
-            <Grid item>
-              <TextField
-                id="password"
-                type="password"
-                label="Password"
-                variant="outlined"
-                {...register("password", {
-                  required: { value: true, message: "Please enter a password" },
-                  minLength: {
-                    value: 8,
-                    message: "Please enter a stronger password",
-                  },
-                })}
-                error={!!errors.password}
-                helperText={errors.password?.message}
-              />
-            </Grid>
-            {showCode && (
-              <Grid item>
-                <TextField
-                  id="code"
-                  type="text"
-                  label="Verification Code"
-                  variant="outlined"
-                  {...register("code", {
-                    required: {
-                      value: true,
-                      message: "Please enter the verification code",
-                    },
-                    minLength: {
-                      value: 6,
-                      message: "Your verification code is 6 characters long",
-                    },
-                    maxLength: {
-                      value: 6,
-                      message: "Your verification code is 6 characters long",
-                    },
-                  })}
-                  error={!!errors.username}
-                  helperText={errors.username?.message}
-                />
+    <Container style={{ padding: "2rem" }} maxWidth="xl">
+      <Grid container alignItems="center" justifyContent="center">
+        <Grid item xs={12} sm={10} md={8} lg={6} xl={4}>
+          <Paper style={{ padding: "2rem" }}>
+            <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    id="username"
+                    type="text"
+                    label="Username"
+                    variant="outlined"
+                    {...register("username", {
+                      required: {
+                        value: true,
+                        message: "Please enter a username",
+                      },
+                      minLength: {
+                        value: 3,
+                        message: "Username should be between 3-16 characters",
+                      },
+                      maxLength: {
+                        value: 16,
+                        message: "Username should be between 3-16 characters",
+                      },
+                    })}
+                    error={!!errors.username}
+                    helperText={errors.username?.message}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    id="email"
+                    type="email"
+                    label="Email"
+                    variant="outlined"
+                    {...register("email", {
+                      required: {
+                        value: true,
+                        message: "Please enter an email",
+                      },
+                    })}
+                    error={!!errors.email}
+                    helperText={errors.email?.message}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    id="password"
+                    type="password"
+                    label="Password"
+                    variant="outlined"
+                    {...register("password", {
+                      required: {
+                        value: true,
+                        message: "Please enter a password",
+                      },
+                      minLength: {
+                        value: 8,
+                        message: "Please enter a stronger password",
+                      },
+                    })}
+                    error={!!errors.password}
+                    helperText={errors.password?.message}
+                  />
+                </Grid>
+                {showCode && (
+                  <Grid item xs={12}>
+                    <TextField
+                      fullWidth
+                      id="code"
+                      type="text"
+                      label="Verification Code"
+                      variant="outlined"
+                      {...register("code", {
+                        required: {
+                          value: true,
+                          message: "Please enter the verification code",
+                        },
+                        minLength: {
+                          value: 6,
+                          message:
+                            "Your verification code is 6 characters long",
+                        },
+                        maxLength: {
+                          value: 6,
+                          message:
+                            "Your verification code is 6 characters long",
+                        },
+                      })}
+                      error={!!errors.username}
+                      helperText={errors.username?.message}
+                    />
+                  </Grid>
+                )}
+                <Grid item style={{ marginTop: 16 }} xs={12}>
+                  <Grid container justifyContent="center">
+                    {!isSubmitting && (
+                      <Button
+                        variant="contained"
+                        type="submit"
+                        disabled={!isValid}
+                        color="primary"
+                      >
+                        {showCode ? "Confirm Code" : "Sign Up"}
+                      </Button>
+                    )}
+                    {isSubmitting && <CircularProgress />}
+                  </Grid>
+                </Grid>
               </Grid>
-            )}
-            <Grid style={{ marginTop: 16 }}>
-              {!isSubmitting && (
-                <Button
-                  variant="contained"
-                  type="submit"
-                  disabled={!isValid}
-                  color="primary"
-                >
-                  {showCode ? "Confirm Code" : "Sign Up"}
-                </Button>
-              )}
-              {isSubmitting && <CircularProgress />}
-            </Grid>
-          </Grid>
 
-          <Snackbar
-            open={snackbarOpen}
-            autoHideDuration={6000}
-            onClose={handleSnackbarClose}
-            anchorOrigin={{ horizontal: "right", vertical: "top" }}
-          >
-            <Alert onClose={handleSnackbarClose} severity="error">
-              {signUpError}
-            </Alert>
-          </Snackbar>
-        </form>
-      </Paper>
+              <Snackbar
+                open={snackbarOpen}
+                autoHideDuration={6000}
+                onClose={handleSnackbarClose}
+                anchorOrigin={{ horizontal: "right", vertical: "top" }}
+              >
+                <Alert onClose={handleSnackbarClose} severity="error">
+                  {signUpError}
+                </Alert>
+              </Snackbar>
+            </form>
+          </Paper>
+        </Grid>
+      </Grid>
     </Container>
   );
 };
