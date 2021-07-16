@@ -1,7 +1,6 @@
 import {
   Card,
   CardContent,
-  // CardMedia,
   createStyles,
   Grid,
   IconButton,
@@ -11,6 +10,7 @@ import {
 } from "@material-ui/core";
 import ArrowUpIcon from "@material-ui/icons/ArrowUpwardRounded";
 import ArrowDownIcon from "@material-ui/icons/ArrowDownwardRounded";
+import NextImage from "next/image";
 import { Post } from "../API";
 
 interface Props {
@@ -75,7 +75,7 @@ const PostPreview = ({ post }: Props) => {
             item
             xs={12}
             md={11}
-            spacing={2}
+            spacing={1}
             className={classes.content}
           >
             <Grid item xs={12}>
@@ -98,6 +98,14 @@ const PostPreview = ({ post }: Props) => {
                 title="iMac 24 Purple"
                 className={classes.picture}
               /> */}
+
+              <NextImage
+                src="https://cdn.mos.cms.futurecdn.net/LBjdeVmH2C7KYspZBFH2hU.jpg"
+                height={9 * 30}
+                width={16 * 30}
+                layout="responsive"
+                objectFit="contain"
+              />
             </Grid>
           </Grid>
         </Grid>
