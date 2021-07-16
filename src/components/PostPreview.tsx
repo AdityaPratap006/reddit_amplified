@@ -33,15 +33,38 @@ const PostPreview = ({ post }: Props) => {
             md={1}
             className={classes.votes}
           >
-            <Grid item sm={2} md={12}>
+            <Grid
+              container
+              item
+              xs={2}
+              md={12}
+              alignItems="center"
+              justifyContent="center"
+            >
               <IconButton color="primary" size="small">
                 <ArrowUpIcon className={classes.voteBtnIcon} />
               </IconButton>
             </Grid>
-            <Grid item sm={2} md={12}>
-              votes
+            <Grid
+              container
+              item
+              xs={2}
+              md={12}
+              alignItems="center"
+              justifyContent="center"
+            >
+              <Typography variant="body2" align="center">
+                {(post.upvotes - post.downvotes).toString()}
+              </Typography>
             </Grid>
-            <Grid item sm={2} md={12}>
+            <Grid
+              container
+              item
+              xs={2}
+              md={12}
+              alignItems="center"
+              justifyContent="center"
+            >
               <IconButton color="primary" size="small">
                 <ArrowDownIcon className={classes.voteBtnIcon} />
               </IconButton>
@@ -50,18 +73,24 @@ const PostPreview = ({ post }: Props) => {
           <Grid
             container
             item
-            sm={12}
+            xs={12}
             md={11}
             spacing={2}
             className={classes.content}
           >
             <Grid item xs={12}>
               <Typography variant="body1">
-                Posted by <b>{post.owner}</b> at {post.createdAt}
+                Posted by <b>{post.owner}</b> at{" "}
+                {new Date(post.createdAt).toLocaleString("en-IN")}
               </Typography>
             </Grid>
             <Grid item xs={12}>
               <Typography variant="h2">{post.title}</Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <Typography variant="body1" component="p">
+                {post.content}
+              </Typography>
             </Grid>
             <Grid item xs={12}>
               {/* <CardMedia

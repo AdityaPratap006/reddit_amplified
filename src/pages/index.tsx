@@ -1,4 +1,11 @@
-import { createStyles, makeStyles, Container, Grid } from "@material-ui/core";
+import {
+  createStyles,
+  makeStyles,
+  Container,
+  Grid,
+  Snackbar,
+} from "@material-ui/core";
+import MuiAlert, { AlertProps } from "@material-ui/lab/Alert";
 import { API } from "aws-amplify";
 import { useEffect, useState } from "react";
 import { ListPostsQuery, Post } from "../API";
@@ -11,19 +18,28 @@ export default function Home() {
   const { user } = useUser();
   const [posts, setPosts] = useState<Post[]>([]);
   const [error, setError] = useState<string>();
+  const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchPostsFromApi = async () => {
-      const allPosts = (await API.graphql({ query: listPosts })) as {
-        data: ListPostsQuery;
-        errors: { errorType: string; message: string; errorInfo: any }[];
-      };
+      try {
+        const allPosts = (await API.graphql({ query: listPosts })) as {
+          data: ListPostsQuery;
+          errors: { errorType: string; message: string; errorInfo: any }[];
+        };
 
-      if (allPosts.data) {
-        setPosts(allPosts.data.listPosts.items);
-      } else {
+        if (allPosts.data) {
+          setPosts(allPosts.data.listPosts.items);
+        } else if (allPosts.errors) {
+          console.log(allPosts.errors);
+          throw new Error(
+            `${allPosts.errors[0].errorType}: ${allPosts.errors[0].message}`
+          );
+        }
+      } catch (error) {
+        console.log(error);
         setError("Couldn't get posts");
-        console.log(allPosts.errors);
+        setSnackbarOpen(true);
       }
     };
 
@@ -42,6 +58,18 @@ export default function Home() {
     console.log("ERROR: ", error);
   }, [error]);
 
+  const handleSnackbarClose = (
+    _event?: React.SyntheticEvent,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setSnackbarOpen(false);
+    setError("");
+  };
+
   return (
     <Container maxWidth="md" className={classes.root}>
       <Grid container spacing={3}>
@@ -51,6 +79,16 @@ export default function Home() {
           </Grid>
         ))}
       </Grid>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ horizontal: "right", vertical: "top" }}
+      >
+        <Alert onClose={handleSnackbarClose} severity="error">
+          {error}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 }
@@ -63,3 +101,7 @@ const useStyles = makeStyles((theme) =>
     },
   })
 );
+
+function Alert(props: AlertProps) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
