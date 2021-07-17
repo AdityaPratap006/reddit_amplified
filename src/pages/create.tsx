@@ -10,6 +10,7 @@ import {
   TextField,
   Typography,
 } from "@material-ui/core";
+import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import ImageDropzone from "../components/ImageDropzone";
 
@@ -23,6 +24,8 @@ interface CreatePostData {
 
 const Create = (props: Props) => {
   const classes = useStyles();
+  const [file, setFile] = useState<string>();
+
   const {
     formState: {
       errors: formErrors,
@@ -34,7 +37,10 @@ const Create = (props: Props) => {
   } = useForm<CreatePostData>({ mode: "all" });
 
   const onSubmit: SubmitHandler<CreatePostData> = async (data) => {
-    console.log(data);
+    console.log({
+      ...data,
+      file,
+    });
   };
 
   return (
@@ -94,7 +100,7 @@ const Create = (props: Props) => {
                     />
                   </Grid>
                   <Grid item xs={12}>
-                    <ImageDropzone />
+                    <ImageDropzone file={file} setFile={setFile} />
                   </Grid>
                   <Grid item xs={12} container justifyContent="flex-end">
                     {!isFormSubmitting && (
@@ -102,6 +108,7 @@ const Create = (props: Props) => {
                         variant="contained"
                         color="primary"
                         disabled={!isFormValid}
+                        type="submit"
                       >
                         Post
                       </Button>

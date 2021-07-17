@@ -1,12 +1,15 @@
 import { createStyles, makeStyles, Typography } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 
-interface Props {}
+interface Props {
+  file: string | undefined;
+  setFile: Dispatch<SetStateAction<string | undefined>>;
+}
 
-export default function ImageDropzone(props: Props) {
+export default function ImageDropzone({ file, setFile }: Props) {
   const classes = useStyles();
-  const [file, setFile] = useState<string>();
+
   const { getRootProps, getInputProps } = useDropzone({
     maxFiles: 1,
     accept: "image/*",
