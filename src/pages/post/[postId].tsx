@@ -56,7 +56,7 @@ function IndividualPost({ post }: Props): ReactElement {
           <Typography variant="h6">Comments</Typography>
         </Grid>
         <Grid item xs={12} container spacing={1}>
-          {post.comments?.items?.map((comment) => (
+          {post?.comments?.items?.map((comment) => (
             <Grid item xs={12} key={comment.id}>
               <CommentCard comment={comment} />
             </Grid>

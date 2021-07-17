@@ -9,9 +9,10 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import { useUser } from "../context/AuthContext";
-import { Button } from "@material-ui/core";
+import { Button, Tooltip } from "@material-ui/core";
 import { Auth } from "aws-amplify";
 import Link from "next/link";
+import AddIcon from "@material-ui/icons/Add";
 
 export default function Header(): React.ReactElement {
   const classes = useStyles();
@@ -56,6 +57,14 @@ export default function Header(): React.ReactElement {
           </Link>
           {user && (
             <div className={classes.right}>
+              <Link href="/create">
+                <Tooltip title="Create Post">
+                  <IconButton color="inherit" aria-label="add">
+                    <AddIcon />
+                  </IconButton>
+                </Tooltip>
+              </Link>
+
               <IconButton
                 aria-label="account of current user"
                 aria-controls="menu-appbar"
