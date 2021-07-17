@@ -3,10 +3,9 @@ import {
   CircularProgress,
   Container,
   Grid,
-  Paper,
-  Typography,
   makeStyles,
   createStyles,
+  Typography,
 } from "@material-ui/core";
 import { GetPostQuery, ListPostsQuery, Post } from "../../API";
 import { graphqlOperation, withSSRContext } from "aws-amplify";
@@ -16,6 +15,8 @@ import { GetStaticPaths, GetStaticProps } from "next";
 import { CustomGraphQLResponse } from "../../types/CustomGraphQLResponse";
 import { ParsedUrlQuery } from "querystring";
 import { useRouter } from "next/router";
+import PostPreview from "../../components/PostPreview";
+import CommentCard from "../../components/CommentCard";
 
 interface Props {
   post: Post;
@@ -43,27 +44,23 @@ function IndividualPost({ post }: Props): ReactElement {
     );
   }
 
+  console.log(post);
   return (
     <Container maxWidth="md" className={classes.root}>
-      <Grid container>
+      <Grid container spacing={4}>
         <Grid item xs={12}>
           {!post && <CircularProgress size={72} />}
-          {post && (
-            <Paper className={classes.postPaper}>
-              <Grid container>
-                <Typography variant="body2">
-                  Posted by <b>{post.owner}</b> at{" "}
-                  {new Date(post.createdAt).toLocaleString("en-IN")}
-                </Typography>
-                <Grid item xs={12}>
-                  <Typography variant="h2">{post.title}</Typography>
-                </Grid>
-                <Grid item xs={12}>
-                  <Typography variant="body1">{post.content}</Typography>
-                </Grid>
-              </Grid>
-            </Paper>
-          )}
+          {post && <PostPreview post={post} />}
+        </Grid>
+        <Grid item xs={12}>
+          <Typography variant="h6">Comments</Typography>
+        </Grid>
+        <Grid item xs={12} container spacing={1}>
+          {post.comments?.items?.map((comment) => (
+            <Grid item xs={12} key={comment.id}>
+              <CommentCard comment={comment} />
+            </Grid>
+          ))}
         </Grid>
       </Grid>
     </Container>
@@ -80,9 +77,6 @@ const useStyles = makeStyles((theme) =>
     },
     loaderGridContainer: {
       height: "70vh",
-    },
-    postPaper: {
-      padding: theme.spacing(2),
     },
   })
 );
