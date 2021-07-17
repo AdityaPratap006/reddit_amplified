@@ -12,7 +12,7 @@ import { Auth, Hub } from "aws-amplify";
 
 interface UserContextValue {
   user: CognitoUser | null;
-  setUser: Dispatch<SetStateAction<CognitoUser>>;
+  setUser: Dispatch<SetStateAction<CognitoUser | null>>;
 }
 
 const UserContext = createContext<UserContextValue>({

@@ -17,7 +17,7 @@ import { CustomGraphQLResponse } from "../types/CustomGraphQLResponse";
 export default function Home() {
   const classes = useStyles();
   const { user } = useUser();
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [posts, setPosts] = useState<(Post | null)[]>([]);
   const [error, setError] = useState<string>();
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
 
@@ -29,7 +29,7 @@ export default function Home() {
         })) as CustomGraphQLResponse<ListPostsQuery>;
 
         if (allPosts.data) {
-          setPosts(allPosts.data.listPosts.items);
+          setPosts(allPosts.data.listPosts?.items || []);
         } else if (allPosts.errors) {
           console.log(allPosts.errors);
           throw new Error(
@@ -73,11 +73,13 @@ export default function Home() {
   return (
     <Container maxWidth="md" className={classes.root}>
       <Grid container spacing={3}>
-        {posts.map((post) => (
-          <Grid item key={post.id} xs={12}>
-            <PostPreview post={post} />
-          </Grid>
-        ))}
+        {posts.map((post) =>
+          !post ? null : (
+            <Grid item key={post.id} xs={12}>
+              <PostPreview post={post} />
+            </Grid>
+          )
+        )}
       </Grid>
       <Snackbar
         open={snackbarOpen}

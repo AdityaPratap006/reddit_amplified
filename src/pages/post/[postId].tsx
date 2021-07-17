@@ -19,7 +19,7 @@ import PostPreview from "../../components/PostPreview";
 import CommentCard from "../../components/CommentCard";
 
 interface Props {
-  post: Post;
+  post?: Post | null;
 }
 
 function IndividualPost({ post }: Props): ReactElement {
@@ -56,11 +56,13 @@ function IndividualPost({ post }: Props): ReactElement {
           <Typography variant="h6">Comments</Typography>
         </Grid>
         <Grid item xs={12} container spacing={1}>
-          {post?.comments?.items?.map((comment) => (
-            <Grid item xs={12} key={comment.id}>
-              <CommentCard comment={comment} />
-            </Grid>
-          ))}
+          {post?.comments?.items?.map((comment) =>
+            comment ? (
+              <Grid item xs={12} key={comment.id}>
+                <CommentCard comment={comment} />
+              </Grid>
+            ) : null
+          )}
         </Grid>
       </Grid>
     </Container>
@@ -82,7 +84,7 @@ const useStyles = makeStyles((theme) =>
 );
 
 interface CustomUrlQuery extends ParsedUrlQuery {
-  postId: string;
+  postId?: string;
 }
 
 export const getStaticProps: GetStaticProps<Props, CustomUrlQuery> = async ({
@@ -91,7 +93,7 @@ export const getStaticProps: GetStaticProps<Props, CustomUrlQuery> = async ({
   const SSR_API = withSSRContext().API as GraphQLAPIClass;
   const post = (await SSR_API.graphql({
     query: getPost,
-    variables: { id: params.postId },
+    variables: { id: params?.postId },
   })) as CustomGraphQLResponse<GetPostQuery>;
 
   return {
@@ -115,13 +117,12 @@ export const getStaticPaths: GetStaticPaths<CustomUrlQuery> = async () => {
     };
   }
 
-  const paths: { params: CustomUrlQuery }[] = allPosts.data.listPosts.items.map(
-    (post) => ({
+  const paths =
+    allPosts.data?.listPosts?.items?.map((post) => ({
       params: {
-        postId: post.id,
+        postId: post?.id,
       },
-    })
-  );
+    })) || [];
 
   return {
     fallback: "blocking",
