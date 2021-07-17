@@ -15,6 +15,7 @@
     "source.fixAll.eslint": true,
     "source.fixAll.format": true
   },
+  "editor.tabSize": 2,
   "[graphql]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   }

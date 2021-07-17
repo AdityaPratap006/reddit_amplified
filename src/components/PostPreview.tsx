@@ -7,10 +7,12 @@ import {
   makeStyles,
   Typography,
   useMediaQuery,
+  ButtonBase,
 } from "@material-ui/core";
 import ArrowUpIcon from "@material-ui/icons/ArrowUpwardRounded";
 import ArrowDownIcon from "@material-ui/icons/ArrowDownwardRounded";
 import NextImage from "next/image";
+import { useRouter } from "next/router";
 import { Post } from "../API";
 
 interface Props {
@@ -20,6 +22,11 @@ interface Props {
 const PostPreview = ({ post }: Props) => {
   const matches = useMediaQuery("(max-width: 960px)");
   const classes = useStyles({ matches })();
+  const router = useRouter();
+
+  const navigateToIndividualPost = () => {
+    router.push(`/post/${post.id}`);
+  };
 
   return (
     <Card elevation={3}>
@@ -70,43 +77,37 @@ const PostPreview = ({ post }: Props) => {
               </IconButton>
             </Grid>
           </Grid>
-          <Grid
-            container
-            item
-            xs={12}
-            md={11}
-            spacing={1}
-            className={classes.content}
-          >
-            <Grid item xs={12}>
-              <Typography variant="body1">
-                Posted by <b>{post.owner}</b> at{" "}
-                {new Date(post.createdAt).toLocaleString("en-IN")}
-              </Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <Typography variant="h2">{post.title}</Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <Typography variant="body1" component="p">
-                {post.content}
-              </Typography>
-            </Grid>
-            <Grid item xs={12}>
-              {/* <CardMedia
-                image="https://cdn.mos.cms.futurecdn.net/LBjdeVmH2C7KYspZBFH2hU.jpg"
-                title="iMac 24 Purple"
-                className={classes.picture}
-              /> */}
-
-              <NextImage
-                src="https://cdn.mos.cms.futurecdn.net/LBjdeVmH2C7KYspZBFH2hU.jpg"
-                height={9 * 30}
-                width={16 * 30}
-                layout="responsive"
-                objectFit="contain"
-              />
-            </Grid>
+          <Grid container item xs={12} md={11} className={classes.content}>
+            <ButtonBase
+              className={classes.buttonBase}
+              onClick={navigateToIndividualPost}
+            >
+              <Grid container spacing={1}>
+                <Grid item xs={12}>
+                  <Typography variant="body2">
+                    Posted by <b>{post.owner}</b> at{" "}
+                    {new Date(post.createdAt).toLocaleString("en-IN")}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography variant="h2">{post.title}</Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography variant="body1" component="p">
+                    {post.content}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <NextImage
+                    src="https://cdn.mos.cms.futurecdn.net/LBjdeVmH2C7KYspZBFH2hU.jpg"
+                    height={9 * 30}
+                    width={16 * 30}
+                    layout="responsive"
+                    objectFit="contain"
+                  />
+                </Grid>
+              </Grid>
+            </ButtonBase>
           </Grid>
         </Grid>
       </CardContent>
@@ -136,6 +137,10 @@ const useStyles = (props: UseStyleProps) =>
         fontSize: 30,
       },
       content: {},
+      buttonBase: {
+        width: "100%",
+        textAlign: "left",
+      },
       picture: {
         width: "100%",
         height: "30rem",

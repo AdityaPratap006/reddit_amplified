@@ -12,6 +12,7 @@ import { ListPostsQuery, Post } from "../API";
 import PostPreview from "../components/PostPreview";
 import { useUser } from "../context/AuthContext";
 import { listPosts } from "../graphql/queries";
+import { CustomGraphQLResponse } from "../types/CustomGraphQLResponse";
 
 export default function Home() {
   const classes = useStyles();
@@ -23,10 +24,9 @@ export default function Home() {
   useEffect(() => {
     const fetchPostsFromApi = async () => {
       try {
-        const allPosts = (await API.graphql({ query: listPosts })) as {
-          data: ListPostsQuery;
-          errors: { errorType: string; message: string; errorInfo: any }[];
-        };
+        const allPosts = (await API.graphql({
+          query: listPosts,
+        })) as CustomGraphQLResponse<ListPostsQuery>;
 
         if (allPosts.data) {
           setPosts(allPosts.data.listPosts.items);
