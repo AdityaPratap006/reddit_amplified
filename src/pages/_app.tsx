@@ -7,6 +7,8 @@ import theme from "../theme";
 import Amplify from "aws-amplify";
 import awsconfig from "../aws-exports";
 import AuthContext from "../context/AuthContext";
+import Header from "../components/Header";
+import { Container } from "@material-ui/core";
 
 Amplify.configure({ ...awsconfig, ssr: true });
 
@@ -32,7 +34,10 @@ function MyApp({ Component, pageProps }: AppProps) {
         <ThemeProvider theme={theme}>
           {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
           <CssBaseline />
-          <Component {...pageProps} />
+          <Header />
+          <Container maxWidth="xl" style={{ paddingTop: 70 }}>
+            <Component {...pageProps} />
+          </Container>
         </ThemeProvider>
       </AuthContext>
     </>
