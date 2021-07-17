@@ -11,6 +11,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import { useForm, SubmitHandler } from "react-hook-form";
+import ImageDropzone from "../components/ImageDropzone";
 
 interface Props {}
 
@@ -91,6 +92,9 @@ const Create = (props: Props) => {
                         formErrors.content?.message || "Max 1800 characters"
                       }
                     />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <ImageDropzone />
                   </Grid>
                   <Grid item xs={12} container justifyContent="flex-end">
                     {!isFormSubmitting && (
