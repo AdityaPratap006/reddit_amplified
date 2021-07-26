@@ -1,10 +1,12 @@
 import { createStyles, makeStyles, Typography } from "@material-ui/core";
-import React, { Dispatch, SetStateAction, useEffect } from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { useDropzone } from "react-dropzone";
 
+type FileType = File | undefined | null;
+
 interface Props {
-  file: string | undefined;
-  setFile: Dispatch<SetStateAction<string | undefined>>;
+  file: FileType;
+  setFile: Dispatch<SetStateAction<FileType>>;
 }
 
 export default function ImageDropzone({ file, setFile }: Props) {
@@ -15,7 +17,7 @@ export default function ImageDropzone({ file, setFile }: Props) {
     accept: "image/*",
     onDrop: (acceptedFiles: File[]) => {
       try {
-        setFile(URL.createObjectURL(acceptedFiles[0]));
+        setFile(acceptedFiles[0]);
       } catch (error) {
         console.log(error);
       }
@@ -23,19 +25,11 @@ export default function ImageDropzone({ file, setFile }: Props) {
   });
 
   const thumbs = file && (
-    <div className={classes.thumb} key={file}>
+    <div className={classes.thumb} key={file.name}>
       <div className={classes.thumbInner}>
-        <img src={file} className={classes.img} />
+        <img src={URL.createObjectURL(file)} className={classes.img} />
       </div>
     </div>
-  );
-
-  useEffect(
-    () => () => {
-      // Make sure to revoke the data uris to avoid memory leaks
-      URL.revokeObjectURL(file || "");
-    },
-    [file]
   );
 
   return (
@@ -67,8 +61,7 @@ const useStyles = makeStyles((theme) =>
       border: "1px solid #eaeaea",
       marginBottom: 8,
       marginRight: 8,
-      width: 300,
-      height: 300,
+      width: 600,
       padding: 4,
       boxSizing: "border-box",
       background: theme.palette.background.paper,
@@ -81,6 +74,8 @@ const useStyles = makeStyles((theme) =>
     thumbsContainer: {
       display: "flex",
       flexDirection: "row",
+      justifyContent: "center",
+      alignItems: "center",
       flexWrap: "wrap",
       marginTop: 16,
     },

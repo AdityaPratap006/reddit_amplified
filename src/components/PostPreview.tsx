@@ -14,6 +14,8 @@ import ArrowDownIcon from "@material-ui/icons/ArrowDownwardRounded";
 import NextImage from "next/image";
 import { useRouter } from "next/router";
 import { Post } from "../API";
+import { useEffect, useState } from "react";
+import { Storage } from "aws-amplify";
 
 interface Props {
   post: Post;
@@ -23,6 +25,24 @@ const PostPreview = ({ post }: Props) => {
   const matches = useMediaQuery("(max-width: 960px)");
   const classes = useStyles({ matches })();
   const router = useRouter();
+  const [postImage, setPostImage] = useState<string>();
+
+  useEffect(() => {
+    const getImageFromStorage = async () => {
+      if (!post.image) {
+        return;
+      }
+      try {
+        const signedURL = await Storage.get(post.image);
+        console.log("Found the image: ", signedURL);
+        setPostImage(signedURL as string);
+      } catch (error) {
+        console.log("Error getting image: ", error);
+      }
+    };
+
+    getImageFromStorage();
+  }, []);
 
   const navigateToIndividualPost = () => {
     router.push(`/post/${post.id}`);
@@ -97,15 +117,17 @@ const PostPreview = ({ post }: Props) => {
                     {post.content}
                   </Typography>
                 </Grid>
-                <Grid item xs={12}>
-                  <NextImage
-                    src="https://cdn.mos.cms.futurecdn.net/LBjdeVmH2C7KYspZBFH2hU.jpg"
-                    height={9 * 30}
-                    width={16 * 30}
-                    layout="responsive"
-                    objectFit="contain"
-                  />
-                </Grid>
+                {postImage && (
+                  <Grid item xs={12}>
+                    <NextImage
+                      src={postImage}
+                      height={9 * 30}
+                      width={16 * 30}
+                      layout="responsive"
+                      objectFit="contain"
+                    />
+                  </Grid>
+                )}
               </Grid>
             </ButtonBase>
           </Grid>

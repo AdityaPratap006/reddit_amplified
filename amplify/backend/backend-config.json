@@ -31,5 +31,11 @@
         }
       }
     }
+  },
+  "storage": {
+    "redditamplifiedmedia": {
+      "service": "S3",
+      "providerPlugin": "awscloudformation"
+    }
   }
 }

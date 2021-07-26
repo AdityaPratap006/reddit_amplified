@@ -1,6 +1,6 @@
 {
     "identityPoolName": "redditamplified7bf7da2a_identitypool_7bf7da2a",
-    "allowUnauthenticatedIdentities": false,
+    "allowUnauthenticatedIdentities": true,
     "resourceNameTruncated": "reddit7bf7da2a",
     "userPoolName": "redditamplified7bf7da2a_userpool_7bf7da2a",
     "autoVerifiedAttributes": [

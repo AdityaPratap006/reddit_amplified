@@ -13,18 +13,25 @@ import {
 import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import ImageDropzone from "../components/ImageDropzone";
+import { Storage, API } from "aws-amplify";
+import { GRAPHQL_AUTH_MODE } from "@aws-amplify/api-graphql";
+import { v4 as uuidv4 } from "uuid";
+import { createPost } from "../graphql/mutations";
+import { CustomGraphQLResponse } from "../types/CustomGraphQLResponse";
+import { CreatePostInput, CreatePostMutation } from "../API";
+import { useRouter } from "next/router";
 
 interface Props {}
 
 interface CreatePostData {
   title: string;
   content: string;
-  image?: string;
 }
 
 const Create = (props: Props) => {
   const classes = useStyles();
-  const [file, setFile] = useState<string>();
+  const [file, setFile] = useState<File | undefined | null>(null);
+  const router = useRouter();
 
   const {
     formState: {
@@ -41,6 +48,38 @@ const Create = (props: Props) => {
       ...data,
       file,
     });
+
+    if (file) {
+      // User uploaded file
+      // Send request to upload to the S3 bucket
+      try {
+        const imagePath = uuidv4();
+        const uploadResult = await Storage.put(imagePath, file, {
+          contentType: file.type, // contentType is optional
+        });
+        console.log("File uploaded! ", { uploadResult });
+
+        // Once the file is uploaded...
+        const createPostInput: CreatePostInput = {
+          title: data.title,
+          content: data.content,
+          image: imagePath,
+          upvotes: 0,
+          downvotes: 0,
+        };
+        const createdPost = (await API.graphql({
+          query: createPost,
+          variables: { input: createPostInput },
+          authMode: GRAPHQL_AUTH_MODE.AMAZON_COGNITO_USER_POOLS,
+        })) as CustomGraphQLResponse<CreatePostMutation>;
+
+        console.log("New Post Created! ", { createdPost });
+
+        router.push(`/post/${createdPost.data.createPost?.id}`);
+      } catch (error) {
+        console.log("Error uploading file: ", error);
+      }
+    }
   };
 
   return (
